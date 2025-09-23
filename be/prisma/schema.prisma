@@ -11,7 +11,7 @@ generator client {
 // 2. Enums
 enum Role {
   buyer
-  dev
+  seller
   admin
 }
 
