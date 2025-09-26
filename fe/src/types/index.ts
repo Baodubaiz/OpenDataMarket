@@ -159,7 +159,14 @@ export type RegisterInput = {
 // Response từ BE
 export type LoginResponse = {
     accessToken: string;
+    refreshToken?: string;   // nếu dùng refresh token
+    user?: {
+        id: string;
+        email: string;
+        role: 'buyer' | 'seller' | 'admin';
+    };
 };
+
 
 export type RegisterResponse = {
     user_id: string;
