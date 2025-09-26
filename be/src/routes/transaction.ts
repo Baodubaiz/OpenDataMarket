@@ -1,0 +1,22 @@
+import { Router } from "express";
+import * as transactionController from "../controllers/Transaction.controller";
+import { verifyToken, requireRole } from "../middleware/VerifyToken";
+
+const router = Router();
+
+// GET all transactions (admin only)
+router.get("/", verifyToken, requireRole(["admin"]), transactionController.getAll);
+
+// GET one transaction (buyer, seller, admin)
+router.get("/:id", verifyToken, requireRole(["buyer", "seller", "admin"]), transactionController.getById);
+
+// CREATE transaction (buyer)
+router.post("/", verifyToken, requireRole(["buyer"]), transactionController.create);
+
+// UPDATE transaction (seller, admin)
+router.put("/:id", verifyToken, requireRole(["seller", "admin"]), transactionController.update);
+
+// DELETE transaction (admin only)
+router.delete("/:id", verifyToken, requireRole(["admin"]), transactionController.remove);
+
+export default router;
