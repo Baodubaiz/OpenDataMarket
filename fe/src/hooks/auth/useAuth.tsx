@@ -3,22 +3,25 @@ import { login, logout, register } from '@/services/authService';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner'; // dùng sonner thay cho toast cũ
 import { User } from 'lucide-react';
+import { decodeToken } from '@/lib/decodeToken';
 
 export const useAuth = () => {
     const router = useRouter();
 
+
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
+            const decodedToken = decodeToken(data.token);
             toast.success("Đăng nhập thành công");
-            console.log("Login data:", data.user?.role);
-            if (data.user?.role === "buyer") {
+
+            console.log("Decoded Token:", decodedToken);
+
+            if (decodedToken?.role === "buyer") {
                 router.push("/");
-                // quay lại trang hiện tại (không redirect)
-                // tức là chỉ toast mà giữ nguyên router
-            } else if (data.user?.role === "seller") {
+            } else if (decodedToken?.role === "seller") {
                 router.push("/seller");
-            } else if (data.user?.role === "admin") {
+            } else if (decodedToken?.role === "admin") {
                 router.push("/admin");
             }
         },
@@ -26,6 +29,7 @@ export const useAuth = () => {
             toast.error("Đăng nhập thất bại");
         },
     });
+
 
     // const loginMutation = useMutation({
     //     mutationFn: login, onSuccess: () => {

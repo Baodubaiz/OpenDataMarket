@@ -19,6 +19,6 @@ export function createToken(user: {
     }
 
     return jwt.sign(payload, JWT_SECRET, {
-        expiresIn: '30m' // Token có hiệu lực 30 phút
+        expiresIn: '2h' // Token có hiệu lực 2 giờ
     })
 }

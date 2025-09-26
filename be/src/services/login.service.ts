@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { createToken } from '../utils/jwt'
+import jwt from 'jsonwebtoken'
 
 const prisma = new PrismaClient()
 
@@ -23,6 +24,9 @@ export const loginService = async (email: string, password: string) => {
         role: user.role,
         wallet_address: user.wallet_address || undefined,
     })
+
+    // const decoded = jwt.decode(token) as { [key: string]: any };
+    // console.log('Decoded token:', decoded);
 
     return token
 }

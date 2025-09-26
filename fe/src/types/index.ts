@@ -158,7 +158,7 @@ export type RegisterInput = {
 
 // Response từ BE
 export type LoginResponse = {
-    accessToken: string;
+    token: string;
     refreshToken?: string;   // nếu dùng refresh token
     user?: {
         id: string;
