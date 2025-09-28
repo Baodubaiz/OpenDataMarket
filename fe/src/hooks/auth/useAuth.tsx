@@ -20,7 +20,7 @@ export const useAuth = () => {
             if (decodedToken?.role === "buyer") {
                 router.push("/");
             } else if (decodedToken?.role === "seller") {
-                router.push("/seller");
+                router.push(`/seller/${decodedToken.user_id}`);
             } else if (decodedToken?.role === "admin") {
                 router.push("/admin");
             }
@@ -29,18 +29,6 @@ export const useAuth = () => {
             toast.error("Đăng nhập thất bại");
         },
     });
-
-
-    // const loginMutation = useMutation({
-    //     mutationFn: login, onSuccess: () => {
-    //         toast.success('Đăng nhập thành công');
-    //         router.push('/');
-    //     },
-    //     onError: () => {
-    //         toast.error('Đăng nhập thất bại');
-
-    //     },
-    // });
 
     const registerMutation = useMutation({
         mutationFn: register,

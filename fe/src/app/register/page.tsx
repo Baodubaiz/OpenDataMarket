@@ -89,6 +89,9 @@ export default function RegisterForm() {
                     >
                         {registerLoading ? 'Đang đăng ký...' : 'Đăng ký'}
                     </button>
+                    <a href="/login" className="text-sm text-purple-400 hover:underline">
+                        Đã có tài khoản? Đăng nhập
+                    </a>
                 </form>
             </div>
         </div>

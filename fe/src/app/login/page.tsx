@@ -84,6 +84,9 @@ export default function LoginForm() {
                     >
                         {loginLoading ? "Đang đăng nhập..." : "Đăng nhập"}
                     </button>
+                    <a href="/register" className="text-sm text-purple-400 hover:underline">
+                        Chưa có tài khoản? Đăng ký
+                    </a>
                 </form>
             </div>
         </div>
