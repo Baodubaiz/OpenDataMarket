@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as tagController from "../controllers/Tag.controller";
+import * as tagController from "../controllers/tag.controller";
 import { verifyToken, requireRole } from "../middleware/VerifyToken";
 
 const router = Router();
@@ -16,7 +16,7 @@ router.post("/", verifyToken, requireRole(["seller", "admin"]), tagController.cr
 // UPDATE tag (seller, admin)
 router.put("/:id", verifyToken, requireRole(["seller", "admin"]), tagController.update);
 
-// DELETE tag (admin only)
-router.delete("/:id", verifyToken, requireRole(["admin"]), tagController.remove);
+// DELETE tag (seller, admin)
+router.delete("/:id", verifyToken, requireRole(["seller", "admin"]), tagController.remove);
 
 export default router;

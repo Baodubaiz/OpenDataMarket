@@ -30,7 +30,7 @@ export function verifyToken(req: AuthRequest, res: Response, next: NextFunction)
     try {
         const decoded = jwt.verify(token, JWT_SECRET) as UserPayload; // 👈 ép kiểu rõ ràng
         req.user = decoded;
-        console.log('Decoded user:', req.user);
+        // console.log('Decoded user:', req.user);
         next();
     } catch (err) {
         res.status(403).json({ error: 'Token không hợp lệ hoặc hết hạn' });

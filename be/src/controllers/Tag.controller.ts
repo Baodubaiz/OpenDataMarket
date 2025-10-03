@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as tagService from "../services/Tag.service";
+import * as tagService from "../services/tag.service";
 
 // 📌 Lấy tất cả tag
 export const getAll = async (req: Request, res: Response) => {

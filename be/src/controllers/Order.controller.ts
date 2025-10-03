@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as orderService from "../services/Order.service";
+import * as orderService from "../services/order.service";
 import { AuthRequest } from "../middleware/VerifyToken";
 
 // 📌 Lấy tất cả order (admin xem tất cả, buyer/seller chỉ xem order liên quan)

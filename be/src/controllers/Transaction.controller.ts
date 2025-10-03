@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as transactionService from "../services/Transaction.service";
+import * as transactionService from "../services/transaction.service";
 import { AuthRequest } from "../middleware/VerifyToken";
 
 // 📌 Lấy tất cả transaction (admin)
@@ -35,7 +35,7 @@ export const create = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 📌 Cập nhật transaction (seller, admin)
+// 📌 Cập nhật transaction (admin)
 export const update = async (req: AuthRequest, res: Response) => {
   try {
     const updated = await transactionService.update(req.params.id, req.body, req.user!);

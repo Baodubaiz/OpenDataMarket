@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as transactionController from "../controllers/Transaction.controller";
+import * as transactionController from "../controllers/transaction.controller";
 import { verifyToken, requireRole } from "../middleware/VerifyToken";
 
 const router = Router();
@@ -13,8 +13,8 @@ router.get("/:id", verifyToken, requireRole(["buyer", "seller", "admin"]), trans
 // CREATE transaction (buyer)
 router.post("/", verifyToken, requireRole(["buyer"]), transactionController.create);
 
-// UPDATE transaction (seller, admin)
-router.put("/:id", verifyToken, requireRole(["seller", "admin"]), transactionController.update);
+// UPDATE transaction (admin only)
+router.put("/:id", verifyToken, requireRole(["admin"]), transactionController.update);
 
 // DELETE transaction (admin only)
 router.delete("/:id", verifyToken, requireRole(["admin"]), transactionController.remove);

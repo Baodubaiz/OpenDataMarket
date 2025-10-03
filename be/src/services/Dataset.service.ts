@@ -3,30 +3,51 @@ import { UserPayload } from "../middleware/VerifyToken";
 
 const prisma = new PrismaClient();
 
-// 📌 Lấy tất cả dataset
-export const getAll = async () => {
-  return await prisma.dataset.findMany();
-};
-
-// 📌 Lấy dataset theo id
-export const getById = async (id: string) => {
-  return await prisma.dataset.findUnique({
-    where: { dataset_id: id },
+// 🟢 Seller tạo dataset
+export const create = async (sellerId: string, data: any) => {
+  // console.log("Creating dataset for seller:", sellerId, "with data:", data);
+  return await prisma.dataset.create({
+    data: {
+      seller_id: sellerId,
+      ...data,
+    },
   });
 };
 
-// 📌 Tạo dataset (seller/admin)
-export const create = async (data: any) => {
-  return await prisma.dataset.create({ data });
+// Lấy tất cả datasets
+export const getAll = async () => {
+  return await prisma.dataset.findMany({
+    where: { is_active: true },
+    include: {
+      seller: { select: { user_id: true, full_name: true } },
+      category: true,
+      tags: true, // 1-n, include trực tiếp là được
+      reviews: true,
+    },
+  });
 };
 
-// 📌 Update dataset
-export const update = async (id: string, data: any, user: UserPayload) => {
+// Lấy dataset theo ID
+export const getById = async (id: string) => {
+  return await prisma.dataset.findUnique({
+    where: { dataset_id: id },
+    include: {
+      seller: { select: { user_id: true, full_name: true } },
+      category: true,
+      tags: true, // 1-n, include trực tiếp
+      reviews: true,
+    },
+  });
+};
+
+
+// ✏️ Update dataset (seller chỉ update dataset của mình, admin update tất cả)
+export const update = async (id: string, user: UserPayload, data: any) => {
   const dataset = await prisma.dataset.findUnique({ where: { dataset_id: id } });
   if (!dataset) throw new Error("Dataset not found");
 
-  if (user.role === "seller" && dataset.seller_id !== user.user_id) {
-    throw new Error("Not allowed");
+  if (user.role !== "admin" && dataset.seller_id !== user.user_id) {
+    throw new Error("Forbidden: bạn không phải owner dataset này");
   }
 
   return await prisma.dataset.update({
@@ -35,16 +56,14 @@ export const update = async (id: string, data: any, user: UserPayload) => {
   });
 };
 
-// 📌 Xóa dataset
+// 🗑 Xoá dataset
 export const remove = async (id: string, user: UserPayload) => {
   const dataset = await prisma.dataset.findUnique({ where: { dataset_id: id } });
   if (!dataset) throw new Error("Dataset not found");
 
-  if (user.role === "seller" && dataset.seller_id !== user.user_id) {
-    throw new Error("Not allowed");
+  if (user.role !== "admin" && dataset.seller_id !== user.user_id) {
+    throw new Error("Forbidden: bạn không phải owner dataset này");
   }
 
-  return await prisma.dataset.delete({
-    where: { dataset_id: id },
-  });
+  return await prisma.dataset.delete({ where: { dataset_id: id } });
 };

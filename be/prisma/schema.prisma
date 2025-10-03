@@ -38,20 +38,19 @@ model User {
   user_id        String  @id @default(uuid())
   wallet_address String? @unique
   email          String? @unique
-  password       String? // chỉ dùng nếu login qua email
+  password       String?
   full_name      String?
   phone_number   String? @unique
-  bank_account   String? @unique // optional → chỉ cần nếu là dev
+  bank_account   String? @unique
   bank_name      String?
   role           Role
   is_active      Boolean  @default(true)
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  // Quan hệ
-  datasets Dataset[] @relation("UserDatasets") // dev bán datasets
-  orders   Order[]   @relation("UserOrders")   // buyer mua datasets
-  reviews  Review[]  @relation("UserReviews")  // buyer đánh giá
+  datasets Dataset[] @relation("UserDatasets")
+  orders   Order[]   @relation("UserOrders")
+  reviews  Review[]  @relation("UserReviews")
 }
 
 model Category {
@@ -66,7 +65,7 @@ model Category {
 model Dataset {
   dataset_id    String   @id @default(uuid())
   seller_id     String
-  category_id   String?
+  category_id   String
   title         String
   description   String?
   price_vnd     Float?
@@ -77,12 +76,11 @@ model Dataset {
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
 
-  // Quan hệ
-  seller   User      @relation("UserDatasets", fields: [seller_id], references: [user_id])
+  seller   User      @relation("UserDatasets", fields: [seller_id], references: [user_id], onDelete: Cascade)
   category Category? @relation(fields: [category_id], references: [category_id])
-  orders   Order[]
-  reviews  Review[]
-  tags     DatasetTag[]
+  tags     Tag[]     
+  orders   Order[]   
+  reviews  Review[] 
 }
 
 model Order {
@@ -95,21 +93,22 @@ model Order {
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  buyer   User     @relation("UserOrders", fields: [buyer_id], references: [user_id])
-  dataset Dataset  @relation(fields: [dataset_id], references: [dataset_id])
+  buyer   User     @relation("UserOrders", fields: [buyer_id], references: [user_id], onDelete: Cascade)
+  dataset Dataset  @relation(fields: [dataset_id], references: [dataset_id], onDelete: Cascade)
   txns    Transaction[]
 }
 
 model Transaction {
   transaction_id String        @id @default(uuid())
   order_id       String
-  tx_hash        String?       // cho ETH
-  bank_ref       String? @unique // cho VNĐ
+  tx_hash        String?
+  bank_ref       String? @unique
   status         ConfirmStatus @default(waiting)
   created_at     DateTime @default(now())
 
-  order Order @relation(fields: [order_id], references: [order_id])
+  order Order @relation(fields: [order_id], references: [order_id], onDelete: Cascade)
 }
+
 
 model Review {
   review_id  String   @id @default(uuid())
@@ -119,24 +118,15 @@ model Review {
   comment    String?
   created_at DateTime @default(now())
 
-  buyer   User    @relation("UserReviews", fields: [buyer_id], references: [user_id])
-  dataset Dataset @relation(fields: [dataset_id], references: [dataset_id])
+  buyer   User    @relation("UserReviews", fields: [buyer_id], references: [user_id], onDelete: Cascade)
+  dataset Dataset @relation(fields: [dataset_id], references: [dataset_id], onDelete: Cascade)
 }
 
 model Tag {
-  tag_id     String   @id @default(uuid())
-  name       String   @unique
-  created_at DateTime @default(now())
-
-  datasets DatasetTag[]
-}
-
-model DatasetTag {
+  tag_id     String    @id @default(uuid())
   dataset_id String
-  tag_id     String
+  name       String
+  created_at DateTime  @default(now())
 
-  dataset Dataset @relation(fields: [dataset_id], references: [dataset_id])
-  tag     Tag     @relation(fields: [tag_id], references: [tag_id])
-
-  @@id([dataset_id, tag_id])
+  dataset Dataset @relation(fields: [dataset_id], references: [dataset_id], onDelete: Cascade)
 }

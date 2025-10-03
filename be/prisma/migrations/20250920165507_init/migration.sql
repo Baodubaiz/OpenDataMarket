@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "public"."Role" AS ENUM ('buyer', 'dev', 'admin');
+CREATE TYPE "public"."Role" AS ENUM ('buyer', 'seller', 'admin');
 
 -- CreateEnum
 CREATE TYPE "public"."PaymentMethod" AS ENUM ('VND', 'ETH');
@@ -97,19 +97,13 @@ CREATE TABLE "public"."Review" (
 -- CreateTable
 CREATE TABLE "public"."Tag" (
     "tag_id" TEXT NOT NULL,
+    "dataset_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Tag_pkey" PRIMARY KEY ("tag_id")
 );
 
--- CreateTable
-CREATE TABLE "public"."DatasetTag" (
-    "dataset_id" TEXT NOT NULL,
-    "tag_id" TEXT NOT NULL,
-
-    CONSTRAINT "DatasetTag_pkey" PRIMARY KEY ("dataset_id","tag_id")
-);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_wallet_address_key" ON "public"."User"("wallet_address");
@@ -154,7 +148,4 @@ ALTER TABLE "public"."Review" ADD CONSTRAINT "Review_buyer_id_fkey" FOREIGN KEY 
 ALTER TABLE "public"."Review" ADD CONSTRAINT "Review_dataset_id_fkey" FOREIGN KEY ("dataset_id") REFERENCES "public"."Dataset"("dataset_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."DatasetTag" ADD CONSTRAINT "DatasetTag_dataset_id_fkey" FOREIGN KEY ("dataset_id") REFERENCES "public"."Dataset"("dataset_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."DatasetTag" ADD CONSTRAINT "DatasetTag_tag_id_fkey" FOREIGN KEY ("tag_id") REFERENCES "public"."Tag"("tag_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Tag" ADD CONSTRAINT "Tag_dataset_id_fkey" FOREIGN KEY ("dataset_id") REFERENCES "public"."Dataset"("dataset_id") ON DELETE RESTRICT ON UPDATE CASCADE;
