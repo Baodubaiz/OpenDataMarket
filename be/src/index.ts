@@ -9,6 +9,7 @@ import transaction from './routes/transaction.route';
 import order from './routes/order.route';
 import review from './routes/review.route';
 import cors from 'cors';
+import path from 'path/win32';
 
 const app = express();
 const port = 3001;
@@ -33,6 +34,8 @@ app.use('/order', order);
 app.use('/review', review);
 
 
+// ⚙️ Cho phép truy cập folder public
+app.use("/upload", express.static(path.join(__dirname, "../public/upload")));
 // ✅ Start server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

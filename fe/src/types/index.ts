@@ -75,7 +75,7 @@ export interface Dataset {
     category: Category;
     orders?: Order[];
     reviews?: Review[];
-    tags?: DatasetTag[];
+    tags?: Tag[];
 }
 
 // Order
@@ -125,16 +125,8 @@ export interface Tag {
     name: string;
     created_at: Date;
 
-    datasets?: DatasetTag[];
-}
+    datasets?: Dataset;
 
-// DatasetTag (bảng trung gian)
-export interface DatasetTag {
-    dataset_id: string;
-    tag_id: string;
-
-    dataset?: Dataset;
-    tag?: Tag;
 }
 
 //  3. Auth Types
