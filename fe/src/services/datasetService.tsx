@@ -13,6 +13,17 @@ export const getDatasetById = async (id: string) => {
     return res.data;
 };
 
+// 📌 Lấy dataset theo sellerId (public)
+export const getDatasetBySellerId = async (id: string) => {
+    const res = await axios.get<Dataset[]>(`/dataset/seller/${id}`);
+    return res.data;
+};
+// 📌 Lấy dataset theo tên seller (public)
+export const getDatasetBySellerName = async (name: string) => {
+    const res = await axios.get<Dataset[]>(`/dataset/seller/name/${name}`);
+    return res.data;
+};
+
 // 📌 Tạo dataset (seller hoặc admin)
 export const createDataset = async (data: Partial<Dataset>, token: string) => {
     const res = await axios.post<Dataset>("/dataset", data, {

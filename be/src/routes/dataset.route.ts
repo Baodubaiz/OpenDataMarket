@@ -14,4 +14,8 @@ router.post("/", verifyToken, requireRole(["seller", "admin"]), uploadThumbnail,
 router.put("/:id", verifyToken, requireRole(["seller", "admin"]), uploadThumbnail, datasetController.update);
 router.delete("/:id", verifyToken, requireRole(["seller", "admin"]), datasetController.remove);
 
+// 🧩 Seller: lấy tất cả dataset của chính mình
+router.get("/seller/:sellerId", datasetController.getBySellerId);
+// 🧩 Seller: lấy tất cả dataset của chính mình theo tên (tìm kiếm gần đúng)
+router.get("/seller/name/:sellerName", datasetController.getBySellerName);
 export default router;

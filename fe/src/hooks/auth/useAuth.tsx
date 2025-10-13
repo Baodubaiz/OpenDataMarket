@@ -15,7 +15,7 @@ export const useAuth = () => {
             const decodedToken = decodeToken(data.token);
             toast.success("Đăng nhập thành công");
 
-            console.log("Decoded Token:", decodedToken);
+            // console.log("Decoded Token:", decodedToken);
 
             if (decodedToken?.role === "buyer") {
                 router.push("/");

@@ -40,6 +40,46 @@ export const getById = async (req: Request, res: Response) => {
   res.json(dataset);
 };
 
+// 🟢 Lấy tất cả dataset theo seller_id
+export const getBySellerId = async (req: Request, res: Response) => {
+  try {
+    const { sellerId } = req.params;
+    const datasets = await datasetService.getBySellerId(sellerId);
+
+    if (!datasets || datasets.length === 0)
+      return res.status(404).json({ message: "Seller chưa có dataset nào" });
+
+    return res.status(200).json({
+      message: "Lấy danh sách dataset của seller thành công",
+      data: datasets,
+    });
+  } catch (error: any) {
+    console.error("❌ Lỗi getBySellerId:", error);
+    return res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+};
+
+
+// 🟢 Lấy tất cả dataset theo tên seller (tìm kiếm gần đúng, không phân biệt hoa thường)
+export const getBySellerName = async (req: Request, res: Response) => {
+  try {
+    const { sellerName } = req.params;
+    const datasets = await datasetService.getBySellerName(sellerName);
+
+    if (!datasets || datasets.length === 0)
+      return res.status(404).json({ message: "Không tìm thấy dataset nào của seller này" });
+
+    return res.status(200).json({
+      message: "Lấy danh sách dataset theo tên seller thành công",
+      data: datasets,
+    });
+  } catch (error: any) {
+    console.error("❌ Lỗi getBySellerName:", error);
+    return res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+};
+
+
 // 🟢 Cập nhật dataset
 export const update = async (req: AuthRequest, res: Response) => {
   try {

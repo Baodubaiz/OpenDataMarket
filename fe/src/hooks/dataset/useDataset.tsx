@@ -2,9 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     getAllDatasets,
     getDatasetById,
+    getDatasetBySellerId,
     createDataset,
     updateDataset,
     deleteDataset,
+    getDatasetBySellerName,
 } from "@/services/datasetService";
 import { Dataset } from "@/types/index";
 
@@ -22,6 +24,23 @@ export const useDatasetById = (id: string) => {
         queryKey: ["dataset", id],
         queryFn: () => getDatasetById(id),
         enabled: !!id,
+    });
+};
+
+// 📌 Lấy dataset theo sellerId (public)
+export const useDatasetBySellerId = (id: string) => {
+    return useQuery({
+        queryKey: ["dataset", id],
+        queryFn: () => getDatasetBySellerId(id),
+        enabled: !!id,
+    });
+};
+// 📌 Lấy dataset theo tên seller (public)
+export const useDatasetBySellerName = (name: string) => {
+    return useQuery({
+        queryKey: ["dataset", name],
+        queryFn: () => getDatasetBySellerName(name),
+        enabled: !!name,
     });
 };
 

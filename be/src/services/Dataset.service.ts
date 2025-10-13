@@ -40,6 +40,38 @@ export const getById = async (id: string) => {
   });
 };
 
+// Lấy tất cả dataset theo seller_id
+export const getBySellerId = async (sellerId: string) => {
+  return await prisma.dataset.findMany({
+    where: { seller_id: sellerId }, // đúng cột khóa ngoại trỏ về user (seller)
+    include: {
+      seller: { select: { user_id: true, full_name: true } },
+      category: true,
+      tags: true,
+      reviews: true,
+    },
+    orderBy: { created_at: "desc" },
+  });
+};
+
+// Lấy tất cả dataset theo tên seller (tìm kiếm gần đúng, không phân biệt hoa thường)
+export const getBySellerName = async (sellerName: string) => {
+  return await prisma.dataset.findMany({
+    where: {
+      seller: {
+        full_name: { contains: sellerName, mode: "insensitive" },
+      },
+    },
+    include: {
+      seller: { select: { user_id: true, full_name: true } },
+      category: true,
+      tags: true,
+      reviews: true,
+    },
+    orderBy: { created_at: "desc" },
+  });
+};
+
 
 // ✏️ Update dataset (seller chỉ update dataset của mình, admin update tất cả)
 export const update = async (id: string, user: UserPayload, data: any) => {

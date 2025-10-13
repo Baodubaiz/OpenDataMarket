@@ -3,7 +3,7 @@ import { User } from "@/types/index"; // type User (nếu có định nghĩa chu
 
 // 📌 Lấy tất cả user (admin)
 export const getAllUsers = async (token: string) => {
-    const res = await axios.get<User[]>("/users", {
+    const res = await axios.get<User[]>("/user", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -11,7 +11,7 @@ export const getAllUsers = async (token: string) => {
 
 // 📌 Lấy 1 user theo id
 export const getUserById = async (id: string, token: string) => {
-    const res = await axios.get<User>(`/users/${id}`, {
+    const res = await axios.get<User>(`/user/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -19,13 +19,13 @@ export const getUserById = async (id: string, token: string) => {
 
 // 📌 Tạo user (đăng ký)
 export const createUser = async (data: Partial<User>) => {
-    const res = await axios.post<User>("/users", data);
+    const res = await axios.post<User>("/user", data);
     return res.data;
 };
 
 // 📌 Cập nhật user
 export const updateUser = async (id: string, data: Partial<User>, token: string) => {
-    const res = await axios.put<User>(`/users/${id}`, data, {
+    const res = await axios.put<User>(`/user/${id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -33,7 +33,7 @@ export const updateUser = async (id: string, data: Partial<User>, token: string)
 
 // 📌 Xóa user (chỉ admin)
 export const deleteUser = async (id: string, token: string) => {
-    const res = await axios.delete(`/users/${id}`, {
+    const res = await axios.delete(`/user/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
