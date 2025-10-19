@@ -6,10 +6,11 @@ import { uploadThumbnail } from "../utils/upload";
 const router = Router();
 
 // 🟢 Public: ai cũng xem được dataset
-router.get("/", datasetController.getAll);
+router.get("/active", datasetController.getAllActive);
 router.get("/:id", datasetController.getById);
 
 // 🔒 Seller/Admin: có quyền quản lý dataset
+router.get("/", verifyToken, requireRole(["seller", "admin"]), datasetController.getAll);
 router.post("/", verifyToken, requireRole(["seller", "admin"]), uploadThumbnail, datasetController.create);
 router.put("/:id", verifyToken, requireRole(["seller", "admin"]), uploadThumbnail, datasetController.update);
 router.delete("/:id", verifyToken, requireRole(["seller", "admin"]), datasetController.remove);

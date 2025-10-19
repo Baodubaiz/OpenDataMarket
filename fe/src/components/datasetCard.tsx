@@ -9,32 +9,70 @@ interface DatasetCardProps {
 }
 
 export function DatasetCard({ dataset, onView, className }: DatasetCardProps) {
-    const thumbnail = dataset.thumbnail_url || "/placeholder.png";
+    // Xử lý đường dẫn ảnh để sử dụng biến 'thumbnail' đã khai báo
+    const imageUrl = dataset.thumbnail_url
+        ? `http://localhost:3001${dataset.thumbnail_url}`
+        : "/placeholder.png";
 
     return (
         <Card
-            className={`relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-1 ${className}`}>
-            <img
-                src={`http://localhost:3001${dataset.thumbnail_url}`}
-                alt={dataset.title}
-                className="w-full h-44 object-cover rounded-t-2xl opacity-90"
-            />
+            className={`
+                relative overflow-hidden rounded-2xl border border-transparent 
+                bg-white/5 backdrop-blur-sm 
+                transition-all duration-300 ease-in-out
+                shadow-lg shadow-black/30
+                
+                /* HIỆU ỨNG HOVER CẢI TIẾN: Border Glow & Nâng nhẹ */
+                hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/30
+                hover:-translate-y-1 
+                ${className}
+            `}>
+
+            {/* KHU VỰC ẢNH CẢI TIẾN */}
+            <div className="relative w-full h-44">
+                <img
+                    src={imageUrl}
+                    alt={dataset.title}
+                    // Bỏ opacity để ảnh sắc nét hơn, giữ object-cover
+                    className="w-full h-full object-cover rounded-t-2xl"
+                />
+
+                {/* LỚP PHỦ GRADIENT: Giúp tiêu đề dễ đọc và ảnh hòa hợp với nền tối */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+            </div>
+
             <CardContent className="p-4">
-                <h3 className="font-semibold text-lg text-white mb-1 line-clamp-1">
+                <h3 className="font-bold text-xl text-white mb-1 line-clamp-1 tracking-wide">
                     {dataset.title}
                 </h3>
-                <p className="text-sm text-gray-300 mb-2 line-clamp-2">
-                    {dataset.description || "Không có mô tả"}
+                <p className="text-sm text-gray-400 mb-2 line-clamp-2 min-h-[40px]">
+                    {dataset.description || "Không có mô tả chi tiết."}
                 </p>
-                <p className="text-sm font-medium mb-3 text-purple-300">
-                    {dataset.price_vnd.toLocaleString()} VNĐ
-                </p>
-                <p className="text-sm font-medium mb-3 text-purple-300">
-                    {dataset.price_eth?.toLocaleString()} VNĐ
-                </p>
+
+                {/* Bố cục giá: Giữ màu cũ, sắp xếp lại để đẹp hơn */}
+                <div className="mb-4">
+                    <p className="text-base font-semibold text-purple-300">
+                        {dataset.price_vnd.toLocaleString()} VNĐ
+                    </p>
+                    {dataset.price_eth && (
+                        <p className="text-sm font-medium text-purple-400/80 mt-1">
+                            ~ {dataset.price_eth.toLocaleString()} ETH
+                        </p>
+                    )}
+                </div>
+
                 <Button
                     onClick={() => onView?.(dataset)}
-                    className="w-full bg-gradient-to-r from-purple-500 to-green-400 text-white font-semibold hover:opacity-90 transition">
+                    className="
+                        w-full 
+                        /* Gradient tím-xanh đẹp hơn, màu đậm hơn */
+                        bg-gradient-to-r from-purple-600 to-green-500 
+                        text-white font-bold text-base 
+                        shadow-lg shadow-purple-500/40 
+                        hover:from-purple-500 hover:to-green-400 
+                        transition-all duration-300 ease-in-out 
+                        transform hover:scale-[1.01]
+                    ">
                     Xem chi tiết
                 </Button>
             </CardContent>

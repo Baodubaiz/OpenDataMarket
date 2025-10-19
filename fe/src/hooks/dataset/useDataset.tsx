@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     getAllDatasets,
+    getAllActiveDatasets,
     getDatasetById,
     getDatasetBySellerId,
     createDataset,
@@ -10,11 +11,20 @@ import {
 } from "@/services/datasetService";
 import { Dataset } from "@/types/index";
 
-// 📌 Lấy tất cả dataset (public)
-export const useDatasets = () => {
-    return useQuery({
+// 📌 Lấy tất cả dataset (yêu cầu token)
+export const useDatasets = (token: string) => {
+    return useQuery<Dataset[]>({
         queryKey: ["datasets"],
-        queryFn: getAllDatasets,
+        queryFn: () => getAllDatasets(token),
+    });
+};
+
+
+// 📌 Lấy tất cả dataset active (public)
+export const useActiveDatasets = () => {
+    return useQuery<Dataset[]>({
+        queryKey: ["activeDatasets"],
+        queryFn: getAllActiveDatasets,
     });
 };
 

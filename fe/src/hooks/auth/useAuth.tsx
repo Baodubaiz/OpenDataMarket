@@ -25,8 +25,10 @@ export const useAuth = () => {
                 router.push("/admin");
             }
         },
-        onError: () => {
-            toast.error("Đăng nhập thất bại");
+        onError: (error: any) => {
+            if (error.response?.status === 401) {
+                toast.error("Sai email hoặc mật khẩu. Vui lòng thử lại.");
+            }
         },
     });
 

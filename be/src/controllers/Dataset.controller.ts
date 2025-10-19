@@ -33,6 +33,12 @@ export const getAll = async (_req: Request, res: Response) => {
   res.json(datasets);
 };
 
+// 🟢 Lấy tất cả datasets active
+export const getAllActive = async (_req: Request, res: Response) => {
+  const datasets = await datasetService.getAllActive();
+  res.json(datasets);
+};
+
 // 🟢 Lấy dataset theo ID
 export const getById = async (req: Request, res: Response) => {
   const dataset = await datasetService.getById(req.params.id);

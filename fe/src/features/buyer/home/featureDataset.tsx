@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DatasetCard } from "@/components/datasetCard";
 import { Dataset, Category } from "@/types/index";
-import { useDatasets } from "@/hooks/dataset/useDataset"; // hook lấy datasets
+import { useActiveDatasets } from "@/hooks/dataset/useDataset"; // hook lấy datasets
 import { useCategories } from "@/hooks/category/useCategory"; // hook lấy categories
 
 // Hook filter dataset theo category
 const useDatasetsWithFilter = (categoryId: string | null) => {
-    const { data: allDatasets = [], isLoading } = useDatasets(); // hook gốc không tham số
+    const { data: allDatasets = [], isLoading } = useActiveDatasets(); // hook gốc không tham số
     const filteredDatasets = categoryId
         ? allDatasets.filter(ds => ds.category.category_id === categoryId)
         : allDatasets;
@@ -28,7 +28,7 @@ export function FeaturedDatasets() {
     const { data: datasets = [], isLoading: datasetsLoading } = useDatasetsWithFilter(selectedCategory);
 
     const handleViewDataset = (dataset: Dataset) => {
-        window.location.href = `/datasets/${dataset.dataset_id}`;
+        window.location.href = `/dataset/${dataset.dataset_id}`;
     };
 
     return (

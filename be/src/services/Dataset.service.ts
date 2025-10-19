@@ -17,6 +17,18 @@ export const create = async (sellerId: string, data: any) => {
 // Lấy tất cả datasets
 export const getAll = async () => {
   return await prisma.dataset.findMany({
+    include: {
+      seller: { select: { user_id: true, full_name: true } },
+      category: true,
+      tags: true, // 1-n, include trực tiếp là được
+      reviews: true,
+    },
+  });
+};
+
+// Lấy tất cả datasets active
+export const getAllActive = async () => {
+  return await prisma.dataset.findMany({
     where: { is_active: true },
     include: {
       seller: { select: { user_id: true, full_name: true } },

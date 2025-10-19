@@ -2,8 +2,17 @@ import axios from "@/lib/axios";
 import { Dataset } from "@/types/index"; // ngài có thể định nghĩa type riêng
 
 // 📌 Lấy tất cả dataset (public)
-export const getAllDatasets = async () => {
-    const res = await axios.get<Dataset[]>("/dataset");
+export const getAllDatasets = async (token: string) => {
+    const res = await axios.get<Dataset[]>("/dataset", {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("Datasets fetched:", res.data);
+    return res.data;
+};
+
+// 📌 Lấy tất cả dataset active (public)
+export const getAllActiveDatasets = async () => {
+    const res = await axios.get<Dataset[]>("/dataset/active");
     return res.data;
 };
 
