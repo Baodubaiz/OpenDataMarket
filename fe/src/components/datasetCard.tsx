@@ -49,17 +49,32 @@ export function DatasetCard({ dataset, onView, className }: DatasetCardProps) {
                     {dataset.description || "Không có mô tả chi tiết."}
                 </p>
 
-                {/* Bố cục giá: Giữ màu cũ, sắp xếp lại để đẹp hơn */}
-                <div className="mb-4">
-                    <p className="text-base font-semibold text-purple-300">
-                        {dataset.price_vnd.toLocaleString()} VNĐ
-                    </p>
-                    {dataset.price_eth && (
-                        <p className="text-sm font-medium text-purple-400/80 mt-1">
-                            ~ {dataset.price_eth.toLocaleString()} ETH
+                {/* 💰 Bố cục giá: hiển thị theo điều kiện, căn giữa đồng đều */}
+                <div className="mb-4 min-h-[48px] flex flex-col justify-center">
+                    {dataset.price_vnd != null && dataset.price_vnd > 0 ? (
+                        <>
+                            <p className="text-base font-semibold text-purple-300">
+                                {dataset.price_vnd.toLocaleString()} VNĐ
+                            </p>
+                            {dataset.price_eth != null && dataset.price_eth > 0 && (
+                                <p className="text-sm font-medium text-purple-400/80 mt-1">
+                                    ~ {dataset.price_eth.toLocaleString()} ETH
+                                </p>
+                            )}
+                        </>
+                    ) : dataset.price_eth != null && dataset.price_eth > 0 ? (
+                        <p className="text-base font-semibold text-purple-300">
+                            {dataset.price_eth.toLocaleString()} ETH
+                        </p>
+                    ) : (
+                        <p className="text-base font-semibold text-green-400">
+                            Free
                         </p>
                     )}
                 </div>
+
+
+
 
                 <Button
                     onClick={() => onView?.(dataset)}
