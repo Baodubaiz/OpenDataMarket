@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as datasetController from "../controllers/dataset.controller";
 import { verifyToken, requireRole } from "../middleware/VerifyToken";
-import { uploadThumbnail } from "../utils/upload";
+import { uploadBoth } from "../utils/uploadBoth";
 
 const router = Router();
 
@@ -11,8 +11,8 @@ router.get("/:id", datasetController.getById);
 
 // 🔒 Seller/Admin: có quyền quản lý dataset
 router.get("/", verifyToken, requireRole(["seller", "admin"]), datasetController.getAll);
-router.post("/", verifyToken, requireRole(["seller", "admin"]), uploadThumbnail, datasetController.create);
-router.put("/:id", verifyToken, requireRole(["seller", "admin"]), uploadThumbnail, datasetController.update);
+router.post("/", verifyToken, requireRole(["seller", "admin"]), uploadBoth, datasetController.create);
+router.put("/:id", verifyToken, requireRole(["seller", "admin"]), uploadBoth, datasetController.update);
 router.delete("/:id", verifyToken, requireRole(["seller", "admin"]), datasetController.remove);
 
 // 🧩 Seller: lấy tất cả dataset của chính mình

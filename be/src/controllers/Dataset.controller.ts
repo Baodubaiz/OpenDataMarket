@@ -7,23 +7,35 @@ export const create = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
 
-    const thumbnail = (req as any).file;
-    const body = { ...req.body };
+    // 📦 Lấy file từ req.files (multer.fields)
+    const files = req.files as {
+      thumbnail_url?: Express.Multer.File[];
+      file_url?: Express.Multer.File[];
+    };
 
-    // ép kiểu numeric và boolean nếu cần
-    body.price_vnd = Number(body.price_vnd) || 0;
-    body.price_eth = Number(body.price_eth) || 0;
-    body.is_active = body.is_active === "true";
+    const thumbnail = files?.thumbnail_url?.[0];
+    const datasetFile = files?.file_url?.[0];
 
-    // thêm đường dẫn thumbnail
-    body.thumbnail_url = thumbnail ? `/upload/thumbnails/${thumbnail.filename}` : null;
+    // ⚙️ Xử lý body
+    const body = {
+      ...req.body,
+      price_vnd: Number(req.body.price_vnd) || 0,
+      price_eth: Number(req.body.price_eth) || 0,
+      is_active: req.body.is_active === "true",
+      thumbnail_url: thumbnail ? `/upload/thumbnails/${thumbnail.filename}` : null,
+      file_url: datasetFile ? `/upload/datasets/${datasetFile.filename}` : null,
+    };
 
+    // 💾 Gọi service lưu vào DB
     const dataset = await datasetService.create(req.user.user_id, body);
-    res.json(dataset);
+
+    res.status(201).json(dataset);
   } catch (err: any) {
+    console.error("❌ Lỗi tạo dataset:", err);
     res.status(400).json({ error: err.message });
   }
 };
+
 
 
 
@@ -86,33 +98,54 @@ export const getBySellerName = async (req: Request, res: Response) => {
 };
 
 
-// 🟢 Cập nhật dataset
+// 🟢 Seller cập nhật dataset
 export const update = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
 
-    const thumbnail = (req as any).file;
+    const datasetId = req.params.id;
+    if (!datasetId) return res.status(400).json({ error: "Invalid dataset ID" });
+
+    // 📦 Lấy file từ req.files (multer.fields)
+    const files = req.files as {
+      thumbnail_url?: Express.Multer.File[];
+      file_url?: Express.Multer.File[];
+    };
+
+    const thumbnail = files?.thumbnail_url?.[0];
+    const datasetFile = files?.file_url?.[0];
+
+    // ⚙️ Xử lý body
     const body = { ...req.body };
 
-    // ép kiểu numeric và boolean nếu cần
     if (body.price_vnd !== undefined) body.price_vnd = Number(body.price_vnd);
     if (body.price_eth !== undefined) body.price_eth = Number(body.price_eth);
     if (body.is_active !== undefined)
       body.is_active = body.is_active === "true" || body.is_active === true;
 
-    // chỉ cập nhật thumbnail nếu có upload mới
+    // 🖼️ Chỉ cập nhật thumbnail nếu có file mới
     if (thumbnail) {
       body.thumbnail_url = `/upload/thumbnails/${thumbnail.filename}`;
     } else {
-      delete body.thumbnail_url; // giữ nguyên đường dẫn cũ
+      delete body.thumbnail_url; // giữ nguyên cũ
     }
 
+    // 📂 Cập nhật dataset file nếu có file mới
+    if (datasetFile) {
+      body.file_url = `/upload/datasets/${datasetFile.filename}`;
+    } else {
+      delete body.file_url; // giữ nguyên cũ
+    }
+
+    // 💾 Gọi service cập nhật
     const dataset = await datasetService.update(req.params.id, req.user, body);
     res.json(dataset);
   } catch (err: any) {
+    console.error("❌ Lỗi cập nhật dataset:", err);
     res.status(400).json({ error: err.message });
   }
 };
+
 
 // 🟢 Xoá dataset
 export const remove = async (req: AuthRequest, res: Response) => {
