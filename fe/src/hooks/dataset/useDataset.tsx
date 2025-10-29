@@ -58,7 +58,7 @@ export const useDatasetBySellerName = (name: string) => {
 export const useCreateDataset = (token: string) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: Partial<Dataset>) => createDataset(data, token),
+        mutationFn: (data: FormData) => createDataset(data, token),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["datasets"] }),
     });
 };
@@ -66,12 +66,15 @@ export const useCreateDataset = (token: string) => {
 // 📌 Cập nhật dataset (seller hoặc admin)
 export const useUpdateDataset = (token: string) => {
     const queryClient = useQueryClient();
+
     return useMutation({
-        mutationFn: ({ id, data }: { id: string; data: Partial<Dataset> }) =>
-            updateDataset(id, data, token),
+        mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+            updateDataset(id, formData, token),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["datasets"] }),
     });
 };
+
+
 
 // 📌 Xóa dataset (seller hoặc admin)
 export const useDeleteDataset = (token: string) => {

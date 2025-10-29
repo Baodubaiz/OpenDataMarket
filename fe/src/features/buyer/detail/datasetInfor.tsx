@@ -20,6 +20,10 @@ export default function DatasetDetailPage() {
         ? `http://localhost:3001${dataset.thumbnail_url}`
         : "/placeholder.png";
 
+    const datasetUrl = dataset.file_url
+        ? `http://localhost:3001${dataset.file_url}`
+        : "/placeholder.png";
+
     // Giả định dataset.tags là một mảng các object { tag_id: string, name: string }
     const datasetTags = Array.isArray(dataset.tags) ? dataset.tags : [];
 
@@ -27,7 +31,6 @@ export default function DatasetDetailPage() {
     return (
         // Đổi màu nền chính sang màu tối sâu (Navy/Black) và loại bỏ `relative` không cần thiết
         <div>
-
 
             {/* Main content area */}
             <main className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
@@ -58,10 +61,12 @@ export default function DatasetDetailPage() {
                             </Button>
                             {/* Trường hợp free (cả hai null) */}
                             {dataset.price_vnd === 0 && dataset.price_eth === 0 ? (
-                                <Button className="bg-green-600 hover:bg-green-700 text-white rounded-full px-5 py-2.5 flex items-center gap-2 cursor-pointer">
-                                    <Download className="w-5 h-5" />
-                                    Download <span className="hidden sm:inline">(Free)</span>
-                                </Button>
+                                <a href={datasetUrl} target="_blank" rel="noopener noreferrer">
+                                    <Button className="bg-green-600 hover:bg-green-700 text-white rounded-full px-5 py-2.5 flex items-center gap-2 cursor-pointer">
+                                        <Download className="w-5 h-5" />
+                                        Download <span className="hidden sm:inline">(Free)</span>
+                                    </Button>
+                                </a>
                             ) : (
                                 <>
                                     {/* Nếu có giá VNĐ */}

@@ -73,9 +73,6 @@ export function DatasetCard({ dataset, onView, className }: DatasetCardProps) {
                     )}
                 </div>
 
-
-
-
                 <Button
                     onClick={() => onView?.(dataset)}
                     className="

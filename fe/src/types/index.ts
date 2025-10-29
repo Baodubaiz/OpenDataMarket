@@ -63,7 +63,7 @@ export interface Dataset {
     category_id: string;
     title: string;
     description?: string | null;
-    price_vnd: number;
+    price_vnd?: number | null;
     price_eth?: number | null;
     file_url: string;
     thumbnail_url?: string | null;
