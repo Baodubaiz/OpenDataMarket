@@ -36,6 +36,7 @@ export interface User {
     phone_number: string;
     bank_account: string;
     bank_name: string;
+    bank_user_name: string;
 
     role: Role;
     is_active: boolean;

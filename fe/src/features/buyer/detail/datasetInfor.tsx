@@ -70,11 +70,13 @@ export default function DatasetDetailPage() {
                             ) : (
                                 <>
                                     {/* Nếu có giá VNĐ */}
-                                    {dataset.price_vnd > 0 && (
-                                        <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5 py-2.5 flex items-center gap-2 cursor-pointer">
-                                            <Download className="w-5 h-5" />
-                                            {dataset.price_vnd.toLocaleString()} <span className="hidden sm:inline">VNĐ</span>
-                                        </Button>
+                                    {dataset.price_vnd != null && dataset.price_vnd > 0 && (
+                                        <a href={`/dataset/${dataset.dataset_id}/payment`}>
+                                            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5 py-2.5 flex items-center gap-2 cursor-pointer">
+                                                <Download className="w-5 h-5" />
+                                                {dataset.price_vnd.toLocaleString()} <span className="hidden sm:inline">VNĐ</span>
+                                            </Button>
+                                        </a>
                                     )}
 
                                     {/* Nếu có giá ETH */}

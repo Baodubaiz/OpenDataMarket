@@ -44,7 +44,7 @@ export const getById = async (id: string) => {
   return await prisma.dataset.findUnique({
     where: { dataset_id: id },
     include: {
-      seller: { select: { user_id: true, full_name: true } },
+      seller: { select: { user_id: true, full_name: true, bank_name: true, bank_account: true, bank_user_name: true } },
       category: true,
       tags: true, // 1-n, include trực tiếp
       reviews: true,

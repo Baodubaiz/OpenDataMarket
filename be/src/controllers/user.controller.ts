@@ -41,7 +41,8 @@ export const create = async (req: Request, res: Response) => {
 // Update user
 export const update = async (req: Request, res: Response) => {
   try {
-    if (["buyer", "seller"].includes((req as any).user.role) && (req as any).user.id !== req.params.id) {
+    if (["buyer", "seller"].includes((req as any).user.role) && (req as any).user.user_id !== req.params.id) {
+      console.log("Forbidden update attempt by", (req as any).user.user_id);
       return res.status(403).json({ message: "Forbidden: cannot update others" });
     }
 
